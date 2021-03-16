@@ -84,4 +84,35 @@ const idInvalidCardCompanies = (array) => {
   });
   if (countunknown > 0) console.log(countunknown + 'x Company not found')
 }
-idInvalidCardCompanies(batch);
+
+const validateCards = (arrays) => {
+	const invalidCards = arrays.filter(arr => !validateCred(arr));
+
+  const validCards = invalidCards.map(arr => {
+  	sum = arr.reduce( (prev, curr) => prev + curr );
+  	let rest = sum % 10;
+    let counter = 0;
+    while(rest > 0){
+    	if (arr[counter] < 9) {
+      	arr.splice(counter, 1, arr[counter] + 1);
+      	//arr[counter] = arr[counter] + 1;
+        rest--;
+      }
+      counter++;
+    }
+    return arr;
+  });
+  return validCards;
+};
+
+const formatCards = arrays => {
+	
+	return arrays.map(arr => {
+  	arr.forEach(el => {
+    	
+    })
+  });
+}
+
+const validatedCards = validateCards([invalid1, invalid2, invalid3, invalid4, invalid5]);
+console.log(formatCards(validatedCards));
