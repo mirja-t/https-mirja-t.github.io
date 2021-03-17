@@ -23,9 +23,8 @@ const mystery5 = [4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3];
 const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5];
 
 // Add your functions below:
-const validateCred = (array) => {
-
-  const arr = array.map(el => el).reverse();
+const luhnCheck = array => {
+	const arr = array.map(el => el).reverse();
   const newArr = [];
   
   let cache = 0;
@@ -42,9 +41,15 @@ const validateCred = (array) => {
     newArr.push(cache);
   }
   
-  cache = newArr.reduce( (prev, curr) => prev + curr );
+  let sum = newArr.reduce( (prev, curr) => prev + curr );
+  return sum % 10;
   
-  if (cache % 10 === 0) {
+}
+const validateCred = (array) => {
+
+  const sum = luhnCheck(array);
+  
+  if (sum === 0) {
   	 return true;
   }
 }
@@ -89,28 +94,25 @@ const validateCards = (arrays) => {
 	const invalidCards = arrays.filter(arr => !validateCred(arr));
 
   const validCards = invalidCards.map(arr => {
-  	sum = arr.reduce( (prev, curr) => prev + curr );
-  	let rest = sum % 10;
-    let counter = 0;
-    while(rest > 0){
-    	if (arr[counter] < 9) {
-      	arr.splice(counter, 1, arr[counter] + 1);
-      	//arr[counter] = arr[counter] + 1;
-        rest--;
+    let rest = luhnCheck(arr);
+  	let counter = arr.length-2;
+    while(rest > 0) {
+      if(arr[counter] < 9) {
+        arr[counter] = arr[counter] + 1;
       }
-      counter++;
+      rest = luhnCheck(arr);
+      counter -= 2;
+      if(counter <= 0) counter = arr.length-2;
     }
+    console.log(rest);
     return arr;
   });
   return validCards;
 };
 
 const formatCards = arrays => {
-	
 	return arrays.map(arr => {
-  	arr.forEach(el => {
-    	
-    })
+  	return arr.join('');
   });
 }
 
